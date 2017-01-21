@@ -62,7 +62,7 @@
 			question: 'Hi, I am a vendor',
 			answers: [
 				{next: 'tourist', text: 'I want to see the tourist'},
-				{next: 'claire', text: 'I want to see the claire'},
+				{next: 'songwriter', text: 'I want to see the claire'},
 				{next: 'cop', text: 'I want to see the cop'}
 			]
 		},
@@ -130,8 +130,14 @@
 				isMoving = true;
 				pos = pos + .001;
 				var timer = window.setTimeout(function(){
+					var normalized = pos - Math.floor(pos);
 					if(isMoving){
-						lib.refresh(pos - Math.floor(pos));
+						if(Math.floor(pos) > 0 && normalized <= .001){
+							lib.nextAmbient();
+						}
+						else{
+							lib.refresh(pos - Math.floor(pos));
+						}
 						app.movementKey()
 					}
 					else{
@@ -168,8 +174,16 @@
 		}
 	}, false)
 
-	lib = new AudioLib();
-	var audio1 = app.$refs['ambience' + Math.floor(pos).toString()];
-	var audio2 = app.$refs['ambience' + Math.floor(pos + 1).toString()];
-	lib.initialBackground(audio1, audio2, pos - Math.floor(pos));
+	var ambientElems = [];
+	var count = 0;
+	var ref = app.$refs['ambience' + count];
+	while(ref){
+		ambientElems.push(ref);
+		count++;
+		ref = app.$refs['ambience' + count];
+	}
+
+	var lib = new AudioLib(ambientElems);
+	lib.startAmbient();
+
 })(window.AudioLib);
