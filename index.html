@@ -8,10 +8,17 @@
         <script src="vue.js"></script>
         <script src="vue-resource.js"></script>
         <link rel="stylesheet" type="text/css" href="style.css" />
+        <script src="audiolib.js"></script>
     </head>
     <body>
         <h1>The Voice of Nashville</h1>
         <div id="app">
+            <audio ref='ambience0' src='src/ambience/s1.mp3'></audio>
+            <audio ref='ambience1' src='src/ambience/s2.mp3'></audio>
+            <audio ref='ambience2' src='src/ambience/s3.mp3'></audio>
+            <audio ref='ambience3' src='src/ambience/s4.mp3'></audio>
+
+
             <div v-if="gameState=='start'">
 
             </div>

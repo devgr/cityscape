@@ -1,4 +1,6 @@
-(function(){
+(function(AudioLib){
+	var pos = 0;
+	var isMoving = false;
 	var flow = {
 		'cowboy': {
 			question: 'Howdy partner!',
@@ -60,7 +62,7 @@
 			question: 'Hi, I am a vendor',
 			answers: [
 				{next: 'tourist', text: 'I want to see the tourist'},
-				{next: 'claire', text: 'I want to see the claire'},
+				{next: 'songwriter', text: 'I want to see the claire'},
 				{next: 'cop', text: 'I want to see the cop'}
 			]
 		},
@@ -123,6 +125,26 @@
 				this.personName = name;
 				this.dialog = obj.question;
 				this.answers = obj.answers;
+			},
+			movementKey: function(){
+				isMoving = true;
+				pos = pos + .001;
+				var timer = window.setTimeout(function(){
+					var normalized = pos - Math.floor(pos);
+					if(isMoving){
+						if(Math.floor(pos) > 0 && normalized <= .001){
+							lib.nextAmbient();
+						}
+						else{
+							lib.refresh(pos - Math.floor(pos));
+						}
+						app.movementKey()
+					}
+					else{
+						window.clearTimeout(timer);
+					}
+				}, 3);
+				console.log(pos)
 			}
 		}
 	});
@@ -138,7 +160,30 @@
 				app.keyPressed(1);
 			case 'd':
 				app.keyPressed(2);
+			case ' ':
+				app.movementKey();
 		}
 
 	}, false);
-})();
+
+	document.addEventListener('keyup', function(event){
+		const keyName = event.key;
+		switch (keyName){
+			case ' ':
+				isMoving = false;
+		}
+	}, false)
+
+	var ambientElems = [];
+	var count = 0;
+	var ref = app.$refs['ambience' + count];
+	while(ref){
+		ambientElems.push(ref);
+		count++;
+		ref = app.$refs['ambience' + count];
+	}
+
+	var lib = new AudioLib(ambientElems);
+	lib.startAmbient();
+
+})(window.AudioLib);
