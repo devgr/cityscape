@@ -1,4 +1,6 @@
-(function(){
+(function(AudioLib){
+	var pos = 0;
+	var isMoving = false;
 	var flow = {
 		'cowboy': {
 			question: 'Howdy partner!',
@@ -123,6 +125,20 @@
 				this.personName = name;
 				this.dialog = obj.question;
 				this.answers = obj.answers;
+			},
+			movementKey: function(){
+				isMoving = true;
+				pos = pos + .001;
+				var timer = window.setTimeout(function(){
+					if(isMoving){
+						lib.refresh(pos - Math.floor(pos));
+						app.movementKey()
+					}
+					else{
+						window.clearTimeout(timer);
+					}
+				}, 3);
+				console.log(pos)
 			}
 		}
 	});
@@ -138,7 +154,22 @@
 				app.keyPressed(1);
 			case 'd':
 				app.keyPressed(2);
+			case ' ':
+				app.movementKey();
 		}
 
 	}, false);
-})();
+
+	document.addEventListener('keyup', function(event){
+		const keyName = event.key;
+		switch (keyName){
+			case ' ':
+				isMoving = false;
+		}
+	}, false)
+
+	lib = new AudioLib();
+	var audio1 = app.$refs['ambience' + Math.floor(pos).toString()];
+	var audio2 = app.$refs['ambience' + Math.floor(pos + 1).toString()];
+	lib.initialBackground(audio1, audio2, pos - Math.floor(pos));
+})(window.AudioLib);
