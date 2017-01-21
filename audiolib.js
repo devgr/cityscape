@@ -53,7 +53,7 @@
 		this.gainState = 0;
 		this.ambientTracks = [];
 		this.ambientSubmix = new MixChannel(this.context);
-		this.ambientSubmix.setGain(0);
+		this.ambientSubmix.setGain(.3);
 		for(var i = 0, len = ambientElemList.length; i < len; i++){
 			var track = new Track(this.context, ambientElemList[i], true, this.ambientSubmix.input);
 			this.ambientTracks.push(track);
@@ -130,15 +130,15 @@
 		this.dialogQueue = [];
 	};	
 
-	AudioLib.prototype.doDialogs = function(keys){
+	AudioLib.prototype.doDialogs = function(keys, extraWaitTime){
 		// https://bugs.chromium.org/p/chromium/issues/detail?id=593273
 		// stop the current playing track
+		var waitTime = extraWaitTime ? extraWaitTime : 0;
 		if(keys.length > 0){
-			var waitTime;
 			if(keys[0] === ''){
-				waitTime = 250;
+				waitTime += 250;
 			} else if(keys[0] !== undefined){
-				waitTime = this.dialogTracks[keys[0]].getLength();
+				waitTime += this.dialogTracks[keys[0]].getLength() + 100;
 			}
 			this.doDialog(keys[0]);
 			var self = this;
@@ -146,7 +146,6 @@
 				if(keys[i] === ''){
 					waitTime += 250;
 				} else if(keys[i] !== undefined){
-					waitTime += this.dialogTracks[keys[i]].getLength() + 100;
 
 					var timer = window.setTimeout((function(index){
 						return function(){
@@ -155,9 +154,12 @@
 						};
 					})(i), waitTime);
 					this.dialogQueue.push(timer);
+
+					waitTime += this.dialogTracks[keys[i]].getLength() + 100;
 				}
 			}
 		}
+		return waitTime;
 	};
 
 	window.AudioLib = AudioLib;
