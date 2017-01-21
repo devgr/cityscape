@@ -113,11 +113,11 @@
 			nextPerson: function(name){
 				var obj = flow[name];
 				if(obj.lose){
-					this.gamestate = 'lose';
+					this.gameState = 'lose';
 					return;
 				}
 				else if(obj.win){
-					this.gamestate = 'win';
+					this.gameState = 'win';
 					return
 				}
 				this.person = name;
