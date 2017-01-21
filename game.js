@@ -106,9 +106,9 @@
 			gameState: 'game'
 		},
 		methods: {
-			choose: function(next){
-				console.log('clicked ' + next);
-				this.nextPerson(next)
+			keyPressed: function(index){
+				var current = flow[this.personName];
+				this.nextPerson(current.answers[index].next);
 			},
 			nextPerson: function(name){
 				var obj = flow[name];
@@ -120,11 +120,25 @@
 					this.gameState = 'win';
 					return
 				}
-				this.person = name;
+				this.personName = name;
 				this.dialog = obj.question;
 				this.answers = obj.answers;
 			}
 		}
 	});
 	app.nextPerson('cowboy');
+
+	// setup key listeners
+	document.addEventListener('keydown', function(event){
+		const keyName = event.key;
+		switch (keyName){
+			case 'a':
+				app.keyPressed(0);
+			case 's':
+				app.keyPressed(1);
+			case 'd':
+				app.keyPressed(2);
+		}
+
+	}, false);
 })();
