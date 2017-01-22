@@ -183,7 +183,7 @@
 		'tourist': {
 			question: 'Hi, I am a tourist',
 			answers: [
-				{id:0, next: 'drugdealer', text: 'I want to see the drugdealer'},
+				{id:0, next: 'songwriter', text: 'I want to see the songwriter'},
 				{id:1, next: 'sports', text: 'I want to see the sports'},
 				{id:2, next: 'partybus', text: 'I want to see the partybus'}
 			]
