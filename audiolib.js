@@ -143,14 +143,21 @@
 		// stop the current playing track
 		var waitTime = extraWaitTime ? extraWaitTime : 0;
 		if(keys.length > 0){
-			if(keys[0] === ''){
-				waitTime += 250;
-			} else if(keys[0] !== undefined){
-				waitTime += this.dialogTracks[keys[0]].getLength() + 100;
+			var i;
+			if(waitTime > 0){
+				i = 0;
+			} else{
+				i = 1; // do the 0 one right away
+				if(keys[0] === ''){
+					waitTime += 250;
+				} else if(keys[0] !== undefined){
+					waitTime += this.dialogTracks[keys[0]].getLength() + 100;
+				}
+				this.doDialog(keys[0]);
 			}
-			this.doDialog(keys[0]);
+			
 			var self = this;
-			for(var i = 1, len = keys.length; i < len; i++){
+			for(var len = keys.length; i < len; i++){
 				if(keys[i] === ''){
 					waitTime += 250;
 				} else if(keys[i] !== undefined){

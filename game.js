@@ -175,7 +175,7 @@
 		},
 		'cowboy2': {
 			intro: 'cowboy2_intro',
-			question: 'Howdy 2',
+			question: 'Howdy partner!',
 			answers: [
 				{id:0, next: 'performer', text: 'I want to see the performer', outloud: 'respond_to_cowboy1'},
 				{id:1, next: 'sports', text: 'Sports fan?', outloud: 'respond_to_cowboy2'},
@@ -203,7 +203,7 @@
 			intro: 'drugdealer',
 			question: 'Hey kid...',
 			answers: [
-				{id:0, next: 'cop', text: 'Yes', outloud:'drugs_yes'},
+				{id:0, next: 'jail', text: 'Yes', outloud:'drugs_yes'},
 				{id:1, next: 'biker', text: 'No', outloud:'drugs_no'},
 				{id:2, next: 'sports', text: 'Ummmmm'}
 			]
