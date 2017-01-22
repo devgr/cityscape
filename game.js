@@ -66,7 +66,7 @@
 				this.personName = name;
 				this.dialog = next.question;
 				this.answers = next.answers;
-				lib.doDialogs([next.intro, next.answers[0].me, next.answers[1].me]);
+				lib.doDialogs([next.intro, next.answers[0].me, next.answers[1].me, next.answers[2].me]);
 			},
 
 			// spacebar movement
@@ -80,12 +80,12 @@
 						if(Math.floor(pos) > 0 && normalized <= .05){
 							lib.nextAmbient();
 						} else {
-                            //play footsteps
-                            	lib.footsteps(footstepList);
+							//play footsteps
+								lib.footsteps(footstepList);
 
-                            //refresh sound sources
+							//refresh sound sources
 							lib.refresh(pos - Math.floor(pos));
-                            window.clearTimeout(timer);
+							window.clearTimeout(timer);
 						}
 					}
 				}, 100);
@@ -103,20 +103,25 @@
 		switch (keyName){
 			case 'a':
 				if(aDown) return;
-                aDown = true;
+				aDown = true;
 				app.keyPressed(0);
+				break;
 			case 's':
-                if(sDown) return;
-                sDown = true;
+				if(sDown) return;
+				sDown = true;
 				app.keyPressed(1);
+				break;
 			case 'd':
 				app.keyPressed(2);
+				break;
 			case 'f':
 				app.keyPressed(3);
+				break;
 			case ' ':
 				if(spDown) return;
 				spDown = true;
 				app.movementKey();
+				break;
 		}
 
 	}, false);
@@ -128,6 +133,7 @@
 			case ' ':
 				isMoving = false;
 				spDown = false;
+				break;
 		}
 	}, false);
 
@@ -148,7 +154,7 @@
 	while(step) {
 		footstepList.push(step);
 		count++;
-        var step = app.$refs['step' + count];
+		var step = app.$refs['step' + count];
 	}
 
 	var flow = {
@@ -157,8 +163,8 @@
 			question: 'Howdy partner!',
 			answers: [
 				{id:0, next: 'cowboy2', text: 'okay', outloud: 'respond_to_street_performer'},
-				{id:1, next: 'performer', text: 'I want to see the performer', outloud: 'respond_to_cowboy1'},
-				{id:2, next: 'sports', text: 'I want to see the sports', outloud: 'respond_to_cowboy2'},
+				{id:1, next: 'cowboy2', text: '', outloud: 'respond_to_street_performer'},
+				{id:2, next: 'cowboy2', text: '', outloud: 'respond_to_street_performer'},
 			]
 		},
 		'cowboy2': {
@@ -166,7 +172,7 @@
 			question: 'Howdy 2',
 			answers: [
 				{id:0, next: 'performer', text: 'I want to see the performer', outloud: 'respond_to_cowboy1'},
-                {id:1, next: 'sports', text: 'I want to see the sports', outloud: 'respond_to_cowboy2'},
+				{id:1, next: 'sports', text: 'I want to see the sports', outloud: 'respond_to_cowboy2'},
 			]
 		},
 		'performer': {
@@ -297,7 +303,7 @@
 
 	window.setInterval(function () {
 		spDown = false;
-    }, 700)
+	}, 700)
 
 
 })(window.AudioLib);
