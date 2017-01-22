@@ -68,63 +68,87 @@
 				this.answers = next.answers;
 				lib.doDialogs([next.intro, next.answers[0].me, next.answers[1].me]);
 			},
+
+			// spacebar movement
 			movementKey: function(){
+				var timer;
 				isMoving = true;
-				pos = pos + .001;
-				var timer = window.setTimeout(function(){
+				pos = pos + .05;
+				timer = window.setTimeout(function(){
 					var normalized = pos - Math.floor(pos);
 					if(isMoving){
-						if(Math.floor(pos) > 0 && normalized <= .001){
+						if(Math.floor(pos) > 0 && normalized <= .05){
 							lib.nextAmbient();
-						}
-						else{
+						} else {
+                            //play footsteps
+                            	lib.footsteps(footstepList);
+
+                            //refresh sound sources
 							lib.refresh(pos - Math.floor(pos));
+                            window.clearTimeout(timer);
 						}
-						app.movementKey()
 					}
-					else{
-						window.clearTimeout(timer);
-					}
-				}, 3);
+				}, 100);
 				console.log(pos)
 			}
 		}
 	});
 
 	// setup key listeners
+	var aDown = false;
+	var sDown = false;
+	var spDown = false;
 	document.addEventListener('keydown', function(event){
 		const keyName = event.key;
 		switch (keyName){
 			case 'a':
+				if(aDown) return;
+                aDown = true;
 				app.keyPressed(0);
 			case 's':
+                if(sDown) return;
+                sDown = true;
 				app.keyPressed(1);
 			case 'd':
 				app.keyPressed(2);
 			case 'f':
 				app.keyPressed(3);
 			case ' ':
+				if(spDown) return;
+				spDown = true;
 				app.movementKey();
 		}
 
 	}, false);
 
+	// key listener for spacebar upon release movement
 	document.addEventListener('keyup', function(event){
 		const keyName = event.key;
 		switch (keyName){
 			case ' ':
 				isMoving = false;
+				spDown = false;
 		}
-	}, false)
+	}, false);
 
 	// get all of the ambient sounds
 	var ambientElems = [];
 	var count = 0;
-	var ref = app.$refs['ambience' + count];
+	var ref = app.$refs['amb' + count];
 	while(ref){
 		ambientElems.push(ref);
 		count++;
-		ref = app.$refs['ambience' + count];
+		ref = app.$refs['amb' + count];
+	}
+
+	//get all footstep sounds
+	var footstepList = [];
+	var count = 0;
+	var step = app.$refs['step' + count];
+	while(step) {
+		footstepList.push(step);
+		count++;
+        var step = app.$refs['step' + count];
 	}
 
 	var flow = {
@@ -254,12 +278,16 @@
 		dialog[key].onloadedmetadata = function(){
 			readyCount++;
 			if(readyCount === need){
-				lib = new AudioLib(ambientElems, dialog);
-				app.initialize('cowboy');
+				lib = new AudioLib(ambientElems, dialog, footstepList);
+			//	app.initialize('cowboy');
 				lib.startAmbient();
 			}
 		}
 	}
+
+	window.setInterval(function () {
+		spDown = false;
+    }, 700)
 
 
 })(window.AudioLib);

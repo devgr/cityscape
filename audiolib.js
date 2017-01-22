@@ -45,7 +45,7 @@
 
 
 
-	function AudioLib(ambientElemList, dialogElemObj){
+	function AudioLib(ambientElemList, dialogElemObj, footstepList){
 		var AudioContext = window.AudioContext || window.webkitAudioContext
 		this.context = new AudioContext();
 
@@ -68,6 +68,14 @@
 			this.dialogTracks[key] = track;
 		}
 		this.dialogQueue = [];
+
+		this.footstepTracks = [];
+		this.footstepSubmix = new MixChannel(this.context);
+		this.footstepSubmix.setGain(.1);
+		for(var i = 0, len = footstepList.length; i < len; i++) {
+			var track = new Track(this.context, footstepList[i], false, this.footstepSubmix.input);
+			this.footstepTracks.push(track);
+		}
 	}
 	AudioLib.prototype.startAmbient = function(){
 		if(this.ambientTracks.length >= this.activeAmbient + 2){
@@ -161,6 +169,11 @@
 		}
 		return waitTime;
 	};
+
+	AudioLib.prototype.footsteps = function(footstepList) {
+		var rand = Math.floor(Math.random() * 11);
+		this.footstepTracks[rand].play();
+    }
 
 	window.AudioLib = AudioLib;
 })();
