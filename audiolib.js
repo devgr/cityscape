@@ -171,7 +171,7 @@
 	};
 
 	AudioLib.prototype.footsteps = function(footstepList) {
-		var rand = Math.floor(Math.random() * 11) + 1;
+		var rand = Math.floor(Math.random() * 11);
 		this.footstepTracks[rand].play();
     }
 
