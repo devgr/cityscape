@@ -26,20 +26,33 @@
 					return
 				}
 				var waitTime = 0;
-				if(responseId !== undefined){
-					var currPerson = flow[this.personName];
+				var currPerson = flow[this.personName];
+				if(responseId < currPerson.answers.length){
 					var myAnswer = curr.answers[responseId];
 					// player says something and other person might respond
 					lib.clearDialogQueue();
 					waitTime = lib.doDialogs([myAnswer.outloud, myAnswer.then]);
-				}
 
-				// wait before showing these?
+					// wait before showing these?
+					this.personName = name;
+					this.dialog = next.question;
+					this.answers = next.answers;
+					var nextDiags = [next.intro];
+					for(var i = 0, len = next.answers.length; i < len; i++){
+						nextDiags.push(next.answers[i].me);
+					}
+					lib.doDialogs(nextDiags, waitTime);
+					// may need to grab that wait time too
+				} else{
+					console.log('bad config');
+				}
+			},
+			initialize: function(name){
+				var next = flow[name];
 				this.personName = name;
 				this.dialog = next.question;
 				this.answers = next.answers;
-				lib.doDialogs([next.intro, next.answers[0].me, next.answers[1].me, next.answers[2].me], waitTime);
-				// may need to grab that wait time too
+				lib.doDialogs([next.intro, next.answers[0].me, next.answers[1].me, next.answers[2].me]);
 			},
 			movementKey: function(){
 				isMoving = true;
@@ -74,6 +87,8 @@
 				app.keyPressed(1);
 			case 'd':
 				app.keyPressed(2);
+			case 'f':
+				app.keyPressed(3);
 			case ' ':
 				app.movementKey();
 		}
@@ -111,7 +126,7 @@
 		'performer': {
 			question: 'Hi, I am a performer',
 			answers: [
-				{id:0, next: 'drug', text: 'I want to see the drug'},
+				{id:0, next: 'drugdealer', text: 'I want to see the drugdealer'},
 				{id:1, next: 'tourist', text: 'I want to see the tourist'},
 				{id:2, next: 'biker', text: 'I want to see the biker'}
 			]
@@ -119,13 +134,13 @@
 		'sports': {
 			question: 'Hi, I am a sports',
 			answers: [
-				{id:0, next: 'drug', text: 'I want to see the drug'},
+				{id:0, next: 'drugdealer', text: 'I want to see the drugdealer'},
 				{id:1, next: 'vendor', text: 'I want to see the vendor'},
 				{id:2, next: 'biker', text: 'I want to see the biker'}
 			]
 		},
-		'drug': {
-			question: 'Hi, I am a drug',
+		'drugdealer': {
+			question: 'Hi, I am a drugdealer',
 			answers: [
 				{id:0, next: 'cop', text: 'I want to see the cop'},
 				{id:1, next: 'biker', text: 'I want to see the biker'},
@@ -136,7 +151,7 @@
 			question: 'Hi, I am a biker',
 			answers: [
 				{id:0, next: 'performer', text: 'I want to see the performer'},
-				{id:1, next: 'drug', text: 'I want to see the drug'},
+				{id:1, next: 'drugdealer', text: 'I want to see the drugdealer'},
 				{id:2, next: 'bachelorette', text: 'I want to see the bachelorette'}
 			]
 		},
@@ -153,21 +168,22 @@
 			answers: [
 				{id:0, next: 'tourist', text: 'I want to see the tourist'},
 				{id:1, next: 'vendor', text: 'I want to see the vendor'},
-				{id:2, next: 'partybus', text: 'I want to see the partybus'}
+				{id:2, next: 'cop', text: 'I want to see the cop'},
+				{id:3, next: 'partybus', text: 'I want to see the partybus'}
 			]
 		},
 		'vendor': {
 			question: 'Hi, I am a vendor',
 			answers: [
 				{id:0, next: 'tourist', text: 'I want to see the tourist'},
-				{id:1, next: 'songwriter', text: 'I want to see the tobi'},
+				{id:1, next: 'songwriter', text: 'I want to see the songwriter'},
 				{id:2, next: 'cop', text: 'I want to see the cop'}
 			]
 		},
 		'tourist': {
 			question: 'Hi, I am a tourist',
 			answers: [
-				{id:0, next: 'drug', text: 'I want to see the drug'},
+				{id:0, next: 'drugdealer', text: 'I want to see the drugdealer'},
 				{id:1, next: 'sports', text: 'I want to see the sports'},
 				{id:2, next: 'partybus', text: 'I want to see the partybus'}
 			]
@@ -224,7 +240,7 @@
 			readyCount++;
 			if(readyCount === need){
 				lib = new AudioLib(ambientElems, dialog);
-				app.nextPerson('cowboy');
+				app.initialize('cowboy');
 				lib.startAmbient();
 			}
 		}

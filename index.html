@@ -37,7 +37,7 @@
                     {{ dialog }}
                 </p>
                 <template v-for="answer in answers">
-                    <a v-on:click="nextPerson(answer.next)">{{ answer.text }}</a><br /><br /> 
+                    <a v-on:click="nextPerson(answer.next, answer.id)">{{ answer.text }}</a><br /><br /> 
                 </template>
             </div>
             <div v-if="gameState=='lose'">
