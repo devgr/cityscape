@@ -172,99 +172,97 @@
 			question: 'Howdy 2',
 			answers: [
 				{id:0, next: 'performer', text: 'I want to see the performer', outloud: 'respond_to_cowboy1'},
-				{id:1, next: 'sports', text: 'I want to see the sports', outloud: 'respond_to_cowboy2'},
+				{id:1, next: 'sports', text: 'Sports fan?', outloud: 'respond_to_cowboy2'},
 			]
 		},
 		'performer': {
 			intro: 'street_performer',
-			question: 'Hi, I am a performer',
+			question: 'Tip jar is right here!',
 			answers: [
-				{id:0, next: 'drugdealer', text: 'I want to see the drugdealer', outloud: 'respond_to_street_performer'},
-				{id:1, next: 'tourist', text: 'I want to see the tourist', outloud: 'respond_to_street_performer'},
-				{id:2, next: 'biker', text: 'I want to see the biker', outloud: 'respond_to_street_performer'}
+				{id:0, next: 'drugdealer', text: 'Good time?', outloud: 'respond_to_street_performer'},
+				{id:1, next: 'tourist', text: 'Follow tourist', outloud: 'respond_to_street_performer'},
+				{id:2, next: 'biker', text: 'Check out biker', outloud: 'respond_to_street_performer'}
 			]
 		},
 		'sports': {
 			intro: ['sports1', 'sports2'],
-			question: 'Hi, I am a sportsfan',
+			question: 'Wooo! Go [insert team name here]!',
 			answers: [
-				{id:0, next: 'drugdealer', text: 'I want to see the drugdealer'},
-				{id:1, next: 'vendor', text: 'I want to see the vendor'},
-				{id:2, next: 'biker', text: 'I want to see the biker'}
+				{id:0, next: 'vendor', text: 'Buy from the vendor'},
+				{id:1, next: 'drugdealer', text: 'Visit the alley'},
+				{id:2, next: 'biker', text: 'Get a ride'}
 			]
 		},
 		'drugdealer': {
-			question: 'Hi, I am a drugdealer',
+			intro: 'drugdealer',
+			question: 'Hey kid...',
 			answers: [
-				{id:0, next: 'cop', text: 'I want to see the cop'},
-				{id:1, next: 'biker', text: 'I want to see the biker'},
-				{id:2, next: 'sports', text: 'I want to see the sports'}
+				{id:0, next: 'cop', text: 'Yes', outloud:'drugs_yes'},
+				{id:1, next: 'biker', text: 'No', outloud:'drugs_no'},
+				{id:2, next: 'sports', text: 'Ummmmm'}
 			]
 		},
 		'biker': {
-			question: 'Hi, I am a biker',
+			intro: 'biker',
+			question: '...',
 			answers: [
-				{id:0, next: 'performer', text: 'I want to see the performer'},
-				{id:1, next: 'drugdealer', text: 'I want to see the drugdealer'},
-				{id:2, next: 'bachelorette', text: 'I want to see the bachelorette'}
+				{id:0, next: 'performer', text: 'Check out the tunes', outloud:'biker_to_performer'},
+				{id:1, next: 'bachelorette', text: 'Have a real good time!', outloud:'biker_to_goodtime'},
+				{id:2, next: 'drugdealer', text: 'Drop off at the alley', outloud:'biker_to_drug'}
 			]
 		},
 		'cop': {
-			question: 'Hi, I am a cop',
+			intro: 'cop',
+			question: 'Officer',
 			answers: [
-				{id:0, next: 'vendor', text: 'I want to see the vendor'},
-				{id:1, next: 'songwriter', text: 'I want to see the songwriter'},
-				{id:2, next: 'jail', text: 'I want to see the jail'}
+				{id:1, next: 'songwriter', text: 'Music, I guess'},
+				{id:0, next: 'vendor', text: 'Buy something from the vendor'},
+				{id:2, next: 'jail', text: 'Tell a joke'}
 			]
 		},
 		'bachelorette': {
-			question: 'Hi, I am a bachelorette',
+			intro: 'bachelorette',
+			question: 'Party!!!',
 			answers: [
-				{id:0, next: 'tourist', text: 'I want to see the tourist'},
-				{id:1, next: 'vendor', text: 'I want to see the vendor'},
-				{id:2, next: 'cop', text: 'I want to see the cop'},
-				{id:3, next: 'partybus', text: 'I want to see the partybus'}
+				{id:1, next: 'vendor', text: 'Go get a bottle opener'},
+				{id:0, next: 'tourist', text: 'Talk to the tourist'},
+				{id:2, next: 'cowboy', text: 'Party on the streets'},
 			]
 		},
 		'vendor': {
-			question: 'Hi, I am a vendor',
+			intro: 'vendor',
+			question: 'Hola amigo!',
 			answers: [
-				{id:0, next: 'tourist', text: 'I want to see the tourist'},
-				{id:1, next: 'songwriter', text: 'I want to see the songwriter'},
-				{id:2, next: 'cop', text: 'I want to see the cop'}
+				{id:0, next: 'tourist', text: 'Talk to the tourist'},
+				{id:1, next: 'songwriter', text: 'Find his friend'},
+				{id:2, next: 'jail', text: 'Steal something', outloud: 'vendor_steal'}
 			]
 		},
 		'tourist': {
-			question: 'Hi, I am a tourist',
+			intro: 'tourist',
+			question: 'Taking selfie...', 
 			answers: [
-				{id:0, next: 'songwriter', text: 'I want to see the songwriter'},
+				{id:0, next: 'songwriter', text: 'Check out the music'},
 				{id:1, next: 'sports', text: 'I want to see the sports'},
-				{id:2, next: 'partybus', text: 'I want to see the partybus'}
+				{id:2, next: 'bachelorette', text: 'Did you say party?'}
 			]
 		},
 		'songwriter': {
-			question: 'Hi, I am a songwriter',
+			intro: 'songwriter',
+			question: 'Would you like to hear my songs?',
 			answers: [
-				{id:0, next: 'performer', text: 'I want to see the performer'},
-				{id:1, next: 'tobi', text: 'I want to see the tobi'},
-				{id:2, next: 'songwriter', text: 'I want to see the songwriter'}
+				{id:0, next: 'songwriter', text: 'Hear some songs'},
+				{id:1, next: 'performer', text: 'Listen to the street performer over there'},
+				{id:2, next: 'tobi', text: 'Have a nice day!'}
 			]
 		},
 		'jail': {
-			question: 'Hi, I am a jail',
+			question: ':(',
 			lose: true
 		},
 		'tobi': {
-			question: 'Hi, I am a tobi',
+			question: '!!!',
 			win: true
-		},
-		'partybus': {
-			question: 'Hi, I am a partybus',
-			answers: [
-				{id:0, next: 'cowboy', text: 'I want to see the cowboy'},
-				{id:1, next: 'cowboy', text: 'I want to see the cowboy'},
-				{id:2, next: 'cowboy', text: 'I want to see the cowboy'}
-			]
 		}
 	};
 
@@ -277,8 +275,23 @@
 		respond_to_street_performer: app.$refs.respond_to_street_performer,
 		sports1: app.$refs.sports1,
 		sports2: app.$refs.sports2,
-		street_performer: app.$refs.street_performer
-	}
+		street_performer: app.$refs.street_performer,
+		bachelorette: app.$refs.bachelorette,
+		biker: app.$refs.biker,
+		biker_to_drug: app.$refs.biker_to_drug,
+		biker_to_goodtime: app.$refs.biker_to_goodtime,
+		biker_to_performer: app.$refs.biker_to_performer,
+		cop: app.$refs.cop,
+		drugdealer: app.$refs.drugdealer,
+		drugs_no: app.$refs.drugs_no,
+		drugs_yes: app.$refs.drugs_yes,
+		jail: app.$refs.jail,
+		songwriter: app.$refs.songwriter,
+		tobis: app.$refs.tobis,
+		tourist: app.$refs.tourist,
+		vendor: app.$refs.vendor,
+		vendor_steal: app.$refs.vendor_steal
+	};
 
 	var lib;
 
@@ -289,7 +302,7 @@
 	//}, 2000);
 
 	var readyCount = 0;
-	var need = 7;
+	var need = 23;
 	for(key in dialog){
 		dialog[key].onloadedmetadata = function(){
 			readyCount++;
