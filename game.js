@@ -2,6 +2,15 @@
 	var pos = 0;
 	var isMoving = false;
 
+	function getRandomInt(min, max) {
+		min = Math.ceil(min);
+		max = Math.floor(max);
+		return Math.floor(Math.random() * (max - min)) + min;
+	}
+	function getRandItem(array){
+		return array[getRandomInt(0, array.length)];
+	}
+
 	var app = new Vue({
 		el: '#app',
 		data: {
@@ -28,7 +37,7 @@
 				var waitTime = 0;
 				var currPerson = flow[this.personName];
 				if(responseId < currPerson.answers.length){
-					var myAnswer = curr.answers[responseId];
+					var myAnswer = currPerson.answers[responseId];
 					// player says something and other person might respond
 					lib.clearDialogQueue();
 					waitTime = lib.doDialogs([myAnswer.outloud, myAnswer.then]);
@@ -37,7 +46,12 @@
 					this.personName = name;
 					this.dialog = next.question;
 					this.answers = next.answers;
-					var nextDiags = [next.intro];
+					var nextDiags;
+					if(Array.isArray(next.intro)){
+						nextDiags = [getRandItem(next.intro)];
+					} else{
+						nextDiags = [next.intro];
+					}
 					for(var i = 0, len = next.answers.length; i < len; i++){
 						nextDiags.push(next.answers[i].me);
 					}
@@ -52,7 +66,7 @@
 				this.personName = name;
 				this.dialog = next.question;
 				this.answers = next.answers;
-				lib.doDialogs([next.intro, next.answers[0].me, next.answers[1].me, next.answers[2].me]);
+				lib.doDialogs([next.intro, next.answers[0].me, next.answers[1].me]);
 			},
 			movementKey: function(){
 				isMoving = true;
@@ -115,24 +129,25 @@
 
 	var flow = {
 		'cowboy': {
-			intro: 'cowboy1',
+			intro: 'intro_cowboy',
 			question: 'Howdy partner!',
 			answers: [
-				{id:0, next: 'performer', text: 'I want to see the performer', me: 'alex1', outloud: 'alex2', them: 'cowboy1'},
-				{id:1, next: 'sports', text: 'I want to see the sports', me: 'alex3', outloud: 'alex4', them: 'cowboy2'},
-				{id:2, next: 'cowboy', text: 'Tell me about yourself', me: 'alex5', outloud: 'alex6', them: 'cowboy3'}
+				{id:0, next: 'performer', text: 'I want to see the performer', outloud: 'respond_to_cowboy1'},
+				{id:1, next: 'sports', text: 'I want to see the sports', outloud: 'respond_to_cowboy2'},
 			]
 		},
 		'performer': {
+			intro: 'street_performer',
 			question: 'Hi, I am a performer',
 			answers: [
-				{id:0, next: 'drugdealer', text: 'I want to see the drugdealer'},
-				{id:1, next: 'tourist', text: 'I want to see the tourist'},
-				{id:2, next: 'biker', text: 'I want to see the biker'}
+				{id:0, next: 'drugdealer', text: 'I want to see the drugdealer', outloud: 'respond_to_street_performer'},
+				{id:1, next: 'tourist', text: 'I want to see the tourist', outloud: 'respond_to_street_performer'},
+				{id:2, next: 'biker', text: 'I want to see the biker', outloud: 'respond_to_street_performer'}
 			]
 		},
 		'sports': {
-			question: 'Hi, I am a sports',
+			intro: ['sports1', 'sports2'],
+			question: 'Hi, I am a sportsfan',
 			answers: [
 				{id:0, next: 'drugdealer', text: 'I want to see the drugdealer'},
 				{id:1, next: 'vendor', text: 'I want to see the vendor'},
@@ -216,13 +231,13 @@
 
 	var dialog = {
 		// debug samples
-		cowboy1: app.$refs.cowboy1,
-		alex1: app.$refs.alex1,
-		alex2: app.$refs.alex2,
-		alex3: app.$refs.alex3,
-		alex4: app.$refs.alex4,
-		alex5: app.$refs.alex5,
-		alex6: app.$refs.alex6
+		intro_cowboy: app.$refs.intro_cowboy,
+		respond_to_cowboy1: app.$refs.respond_to_cowboy1,
+		respond_to_cowboy2: app.$refs.respond_to_cowboy2,
+		respond_to_street_performer: app.$refs.respond_to_street_performer,
+		sports1: app.$refs.sports1,
+		sports2: app.$refs.sports2,
+		street_performer: app.$refs.street_performer
 	}
 
 	var lib;
