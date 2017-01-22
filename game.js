@@ -97,6 +97,8 @@
 	// setup key listeners
 	var aDown = false;
 	var sDown = false;
+	var dDown = false;
+	var fDown = false;
 	var spDown = false;
 	document.addEventListener('keydown', function(event){
 		const keyName = event.key;
@@ -112,9 +114,13 @@
 				app.keyPressed(1);
 				break;
 			case 'd':
+				if(dDown) return;
+				dDown = true;
 				app.keyPressed(2);
 				break;
 			case 'f':
+				if(fDown) return;
+				fDown = true;
 				app.keyPressed(3);
 				break;
 			case ' ':
@@ -316,6 +322,10 @@
 
 	window.setInterval(function () {
 		spDown = false;
+		aDown = false;
+		sDown = false;
+		dDown = false;
+		fDown = false;
 	}, 700)
 
 
