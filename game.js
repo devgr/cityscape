@@ -156,8 +156,17 @@
 			intro: 'intro_cowboy',
 			question: 'Howdy partner!',
 			answers: [
+				{id:0, next: 'cowboy2', text: 'okay', outloud: 'respond_to_street_performer'},
+				{id:1, next: 'performer', text: 'I want to see the performer', outloud: 'respond_to_cowboy1'},
+				{id:2, next: 'sports', text: 'I want to see the sports', outloud: 'respond_to_cowboy2'},
+			]
+		},
+		'cowboy2': {
+			intro: 'cowboy2_intro',
+			question: 'Howdy 2',
+			answers: [
 				{id:0, next: 'performer', text: 'I want to see the performer', outloud: 'respond_to_cowboy1'},
-				{id:1, next: 'sports', text: 'I want to see the sports', outloud: 'respond_to_cowboy2'},
+                {id:1, next: 'sports', text: 'I want to see the sports', outloud: 'respond_to_cowboy2'},
 			]
 		},
 		'performer': {
@@ -256,6 +265,7 @@
 	var dialog = {
 		// debug samples
 		intro_cowboy: app.$refs.intro_cowboy,
+		cowboy2_intro: app.$refs.cowboy2_intro,
 		respond_to_cowboy1: app.$refs.respond_to_cowboy1,
 		respond_to_cowboy2: app.$refs.respond_to_cowboy2,
 		respond_to_street_performer: app.$refs.respond_to_street_performer,
@@ -279,7 +289,7 @@
 			readyCount++;
 			if(readyCount === need){
 				lib = new AudioLib(ambientElems, dialog, footstepList);
-			//	app.initialize('cowboy');
+				app.initialize('cowboy');
 				lib.startAmbient();
 			}
 		}
