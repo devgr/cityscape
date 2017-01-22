@@ -59,11 +59,11 @@
 			movementKey: function(){
 				var timer;
 				isMoving = true;
-				pos = pos + .001;
+				pos = pos + .05;
 				timer = window.setTimeout(function(){
 					var normalized = pos - Math.floor(pos);
 					if(isMoving){
-						if(Math.floor(pos) > 0 && normalized <= .001){
+						if(Math.floor(pos) > 0 && normalized <= .05){
 							lib.nextAmbient();
 						} else {
                             //play footsteps
