@@ -1,104 +1,7 @@
 (function(AudioLib){
 	var pos = 0;
 	var isMoving = false;
-	var flow = {
-		'cowboy': {
-			question: 'Howdy partner!',
-			answers: [
-				{next: 'performer', text: 'I want to see the performer'},
-				{next: 'sports', text: 'I want to see the sports'},
-				{next: 'cowboy', text: 'Tell me about yourself'}
-			]
-		},
-		'performer': {
-			question: 'Hi, I am a performer',
-			answers: [
-				{next: 'drug', text: 'I want to see the drug'},
-				{next: 'tourist', text: 'I want to see the tourist'},
-				{next: 'biker', text: 'I want to see the biker'}
-			]
-		},
-		'sports': {
-			question: 'Hi, I am a sports',
-			answers: [
-				{next: 'drug', text: 'I want to see the drug'},
-				{next: 'vendor', text: 'I want to see the vendor'},
-				{next: 'biker', text: 'I want to see the biker'}
-			]
-		},
-		'drug': {
-			question: 'Hi, I am a drug',
-			answers: [
-				{next: 'cop', text: 'I want to see the cop'},
-				{next: 'biker', text: 'I want to see the biker'},
-				{next: 'sports', text: 'I want to see the sports'}
-			]
-		},
-		'biker': {
-			question: 'Hi, I am a biker',
-			answers: [
-				{next: 'performer', text: 'I want to see the performer'},
-				{next: 'drug', text: 'I want to see the drug'},
-				{next: 'bachelorette', text: 'I want to see the bachelorette'}
-			]
-		},
-		'cop': {
-			question: 'Hi, I am a cop',
-			answers: [
-				{next: 'vendor', text: 'I want to see the vendor'},
-				{next: 'songwriter', text: 'I want to see the songwriter'},
-				{next: 'jail', text: 'I want to see the jail'}
-			]
-		},
-		'bachelorette': {
-			question: 'Hi, I am a bachelorette',
-			answers: [
-				{next: 'tourist', text: 'I want to see the tourist'},
-				{next: 'vendor', text: 'I want to see the vendor'},
-				{next: 'partybus', text: 'I want to see the partybus'}
-			]
-		},
-		'vendor': {
-			question: 'Hi, I am a vendor',
-			answers: [
-				{next: 'tourist', text: 'I want to see the tourist'},
-				{next: 'songwriter', text: 'I want to see the claire'},
-				{next: 'cop', text: 'I want to see the cop'}
-			]
-		},
-		'tourist': {
-			question: 'Hi, I am a tourist',
-			answers: [
-				{next: 'drug', text: 'I want to see the drug'},
-				{next: 'sports', text: 'I want to see the sports'},
-				{next: 'partybus', text: 'I want to see the partybus'}
-			]
-		},
-		'songwriter': {
-			question: 'Hi, I am a songwriter',
-			answers: [
-				{next: 'performer', text: 'I want to see the performer'},
-				{next: 'claire', text: 'I want to see the claire'},
-				{next: 'songwriter', text: 'I want to see the songwriter'}
-			]
-		},
-		'jail': {
-			question: 'Hi, I am a jail',
-			lose: true
-		},
-		'claire': {
-			question: 'Hi, I am a claire',
-			win: true
-		},
-		'partybus': {
-			question: 'Hi, I am a partybus',
-			answers: [
-				{next: 'cowboy', text: 'I want to see the cowboy'},
-				{next: 'cowboy', text: 'I want to see the cowboy'},
-				{next: 'cowboy', text: 'I want to see the cowboy'}
-			]
-		}
-	}
+
 	var app = new Vue({
 		el: '#app',
 		data: {
@@ -110,21 +13,46 @@
 		methods: {
 			keyPressed: function(index){
 				var current = flow[this.personName];
-				this.nextPerson(current.answers[index].next);
+				this.nextPerson(current.answers[index].next, index);
 			},
-			nextPerson: function(name){
-				var obj = flow[name];
-				if(obj.lose){
+			nextPerson: function(name, responseId){
+				var next = flow[name];
+				if(next.lose){
 					this.gameState = 'lose';
 					return;
 				}
-				else if(obj.win){
+				if(next.win){
 					this.gameState = 'win';
 					return
 				}
+				var waitTime = 0;
+				var currPerson = flow[this.personName];
+				if(responseId < currPerson.answers.length){
+					var myAnswer = curr.answers[responseId];
+					// player says something and other person might respond
+					lib.clearDialogQueue();
+					waitTime = lib.doDialogs([myAnswer.outloud, myAnswer.then]);
+
+					// wait before showing these?
+					this.personName = name;
+					this.dialog = next.question;
+					this.answers = next.answers;
+					var nextDiags = [next.intro];
+					for(var i = 0, len = next.answers.length; i < len; i++){
+						nextDiags.push(next.answers[i].me);
+					}
+					lib.doDialogs(nextDiags, waitTime);
+					// may need to grab that wait time too
+				} else{
+					console.log('bad config');
+				}
+			},
+			initialize: function(name){
+				var next = flow[name];
 				this.personName = name;
-				this.dialog = obj.question;
-				this.answers = obj.answers;
+				this.dialog = next.question;
+				this.answers = next.answers;
+				lib.doDialogs([next.intro, next.answers[0].me, next.answers[1].me, next.answers[2].me]);
 			},
 			movementKey: function(){
 				isMoving = true;
@@ -148,7 +76,6 @@
 			}
 		}
 	});
-	app.nextPerson('cowboy');
 
 	// setup key listeners
 	document.addEventListener('keydown', function(event){
@@ -160,6 +87,8 @@
 				app.keyPressed(1);
 			case 'd':
 				app.keyPressed(2);
+			case 'f':
+				app.keyPressed(3);
 			case ' ':
 				app.movementKey();
 		}
@@ -174,6 +103,7 @@
 		}
 	}, false)
 
+	// get all of the ambient sounds
 	var ambientElems = [];
 	var count = 0;
 	var ref = app.$refs['ambience' + count];
@@ -183,7 +113,138 @@
 		ref = app.$refs['ambience' + count];
 	}
 
-	var lib = new AudioLib(ambientElems);
-	lib.startAmbient();
+	var flow = {
+		'cowboy': {
+			intro: 'cowboy1',
+			question: 'Howdy partner!',
+			answers: [
+				{id:0, next: 'performer', text: 'I want to see the performer', me: 'alex1', outloud: 'alex2', them: 'cowboy1'},
+				{id:1, next: 'sports', text: 'I want to see the sports', me: 'alex3', outloud: 'alex4', them: 'cowboy2'},
+				{id:2, next: 'cowboy', text: 'Tell me about yourself', me: 'alex5', outloud: 'alex6', them: 'cowboy3'}
+			]
+		},
+		'performer': {
+			question: 'Hi, I am a performer',
+			answers: [
+				{id:0, next: 'drugdealer', text: 'I want to see the drugdealer'},
+				{id:1, next: 'tourist', text: 'I want to see the tourist'},
+				{id:2, next: 'biker', text: 'I want to see the biker'}
+			]
+		},
+		'sports': {
+			question: 'Hi, I am a sports',
+			answers: [
+				{id:0, next: 'drugdealer', text: 'I want to see the drugdealer'},
+				{id:1, next: 'vendor', text: 'I want to see the vendor'},
+				{id:2, next: 'biker', text: 'I want to see the biker'}
+			]
+		},
+		'drugdealer': {
+			question: 'Hi, I am a drugdealer',
+			answers: [
+				{id:0, next: 'cop', text: 'I want to see the cop'},
+				{id:1, next: 'biker', text: 'I want to see the biker'},
+				{id:2, next: 'sports', text: 'I want to see the sports'}
+			]
+		},
+		'biker': {
+			question: 'Hi, I am a biker',
+			answers: [
+				{id:0, next: 'performer', text: 'I want to see the performer'},
+				{id:1, next: 'drugdealer', text: 'I want to see the drugdealer'},
+				{id:2, next: 'bachelorette', text: 'I want to see the bachelorette'}
+			]
+		},
+		'cop': {
+			question: 'Hi, I am a cop',
+			answers: [
+				{id:0, next: 'vendor', text: 'I want to see the vendor'},
+				{id:1, next: 'songwriter', text: 'I want to see the songwriter'},
+				{id:2, next: 'jail', text: 'I want to see the jail'}
+			]
+		},
+		'bachelorette': {
+			question: 'Hi, I am a bachelorette',
+			answers: [
+				{id:0, next: 'tourist', text: 'I want to see the tourist'},
+				{id:1, next: 'vendor', text: 'I want to see the vendor'},
+				{id:2, next: 'cop', text: 'I want to see the cop'},
+				{id:3, next: 'partybus', text: 'I want to see the partybus'}
+			]
+		},
+		'vendor': {
+			question: 'Hi, I am a vendor',
+			answers: [
+				{id:0, next: 'tourist', text: 'I want to see the tourist'},
+				{id:1, next: 'songwriter', text: 'I want to see the songwriter'},
+				{id:2, next: 'cop', text: 'I want to see the cop'}
+			]
+		},
+		'tourist': {
+			question: 'Hi, I am a tourist',
+			answers: [
+				{id:0, next: 'songwriter', text: 'I want to see the songwriter'},
+				{id:1, next: 'sports', text: 'I want to see the sports'},
+				{id:2, next: 'partybus', text: 'I want to see the partybus'}
+			]
+		},
+		'songwriter': {
+			question: 'Hi, I am a songwriter',
+			answers: [
+				{id:0, next: 'performer', text: 'I want to see the performer'},
+				{id:1, next: 'tobi', text: 'I want to see the tobi'},
+				{id:2, next: 'songwriter', text: 'I want to see the songwriter'}
+			]
+		},
+		'jail': {
+			question: 'Hi, I am a jail',
+			lose: true
+		},
+		'tobi': {
+			question: 'Hi, I am a tobi',
+			win: true
+		},
+		'partybus': {
+			question: 'Hi, I am a partybus',
+			answers: [
+				{id:0, next: 'cowboy', text: 'I want to see the cowboy'},
+				{id:1, next: 'cowboy', text: 'I want to see the cowboy'},
+				{id:2, next: 'cowboy', text: 'I want to see the cowboy'}
+			]
+		}
+	};
+
+	var dialog = {
+		// debug samples
+		cowboy1: app.$refs.cowboy1,
+		alex1: app.$refs.alex1,
+		alex2: app.$refs.alex2,
+		alex3: app.$refs.alex3,
+		alex4: app.$refs.alex4,
+		alex5: app.$refs.alex5,
+		alex6: app.$refs.alex6
+	}
+
+	var lib;
+
+	//window.setTimeout(function(){
+	//	lib = new AudioLib(ambientElems, dialog);
+	//	app.nextPerson('cowboy');
+	//	lib.startAmbient();
+	//}, 2000);
+
+	var readyCount = 0;
+	var need = 7;
+	for(key in dialog){
+		dialog[key].onloadedmetadata = function(){
+			readyCount++;
+			if(readyCount === need){
+				lib = new AudioLib(ambientElems, dialog);
+				app.initialize('cowboy');
+				lib.startAmbient();
+			}
+		}
+	}
+
 
 })(window.AudioLib);
