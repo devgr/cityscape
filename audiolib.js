@@ -46,34 +46,35 @@
 
 
 	function AudioLib(ambientElemList, dialogElemObj, footstepList){
-		var AudioContext = window.AudioContext || window.webkitAudioContext
+		var AudioContext = window.AudioContext || window.webkitAudioContext;
 		this.context = new AudioContext();
 
 		this.activeAmbient = 0;
 		this.gainState = 0;
 		this.ambientTracks = [];
 		this.ambientSubmix = new MixChannel(this.context);
-		this.ambientSubmix.setGain(.3);
+		this.ambientSubmix.setGain(0.3);
+		var track;
 		for(var i = 0, len = ambientElemList.length; i < len; i++){
-			var track = new Track(this.context, ambientElemList[i], true, this.ambientSubmix.input);
+			track = new Track(this.context, ambientElemList[i], true, this.ambientSubmix.input);
 			this.ambientTracks.push(track);
 		}
 
 		this.currentDialog = '';
 		this.dialogTracks = {};
 		this.dialogSubmix = new MixChannel(this.context);
-		this.dialogSubmix.setGain(.6);
+		this.dialogSubmix.setGain(1);
 		for(var key in dialogElemObj){
-			var track = new Track(this.context, dialogElemObj[key], false, this.dialogSubmix.input);
+			track = new Track(this.context, dialogElemObj[key], false, this.dialogSubmix.input);
 			this.dialogTracks[key] = track;
 		}
 		this.dialogQueue = [];
 
 		this.footstepTracks = [];
 		this.footstepSubmix = new MixChannel(this.context);
-		this.footstepSubmix.setGain(.1);
-		for(var i = 0, len = footstepList.length; i < len; i++) {
-			var track = new Track(this.context, footstepList[i], false, this.footstepSubmix.input);
+		this.footstepSubmix.setGain(0.2);
+		for(i = 0, len = footstepList.length; i < len; i++) {
+			track = new Track(this.context, footstepList[i], false, this.footstepSubmix.input);
 			this.footstepTracks.push(track);
 		}
 	}
@@ -118,7 +119,7 @@
 	AudioLib.prototype.doDialog = function(key){
 		// stop the current playing track
 		if(this.currentDialog){
-			var track = this.dialogTracks[this.currentDialog]
+			var track = this.dialogTracks[this.currentDialog];
 			track.stop();
 		}
 		
@@ -180,7 +181,7 @@
 	AudioLib.prototype.footsteps = function(footstepList) {
 		var rand = Math.floor(Math.random() * 11);
 		this.footstepTracks[rand].play();
-    }
+    };
 
 	window.AudioLib = AudioLib;
 })();

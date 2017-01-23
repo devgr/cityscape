@@ -26,18 +26,25 @@
 			},
 			nextPerson: function(name, responseId){
 				var next = flow[name];
+				var currPerson = flow[this.personName];
+				var myAnswer;
 				if(next.lose){
+					myAnswer = currPerson.answers[responseId];
+					lib.clearDialogQueue();
+					lib.doDialogs([myAnswer.outloud, myAnswer.then]);
 					this.gameState = 'lose';
 					return;
 				}
 				if(next.win){
+					myAnswer = currPerson.answers[responseId];
+					lib.clearDialogQueue();
+					lib.doDialogs([myAnswer.outloud, myAnswer.then]);
 					this.gameState = 'win';
-					return
+					return;
 				}
 				var waitTime = 0;
-				var currPerson = flow[this.personName];
 				if(responseId < currPerson.answers.length){
-					var myAnswer = currPerson.answers[responseId];
+					myAnswer = currPerson.answers[responseId];
 					// player says something and other person might respond
 					lib.clearDialogQueue();
 					waitTime = lib.doDialogs([myAnswer.outloud, myAnswer.then]);
@@ -73,11 +80,11 @@
 			movementKey: function(){
 				var timer;
 				isMoving = true;
-				pos = pos + .05;
+				pos = pos + 0.05;
 				timer = window.setTimeout(function(){
 					var normalized = pos - Math.floor(pos);
 					if(isMoving){
-						if(Math.floor(pos) > 0 && normalized <= .05){
+						if(Math.floor(pos) > 0 && normalized <= 0.05){
 							lib.nextAmbient();
 						} else {
 							//play footsteps
@@ -89,7 +96,7 @@
 						}
 					}
 				}, 100);
-				console.log(pos)
+				console.log(pos);
 			}
 		}
 	});
@@ -155,12 +162,12 @@
 
 	//get all footstep sounds
 	var footstepList = [];
-	var count = 0;
+	count = 0;
 	var step = app.$refs['step' + count];
 	while(step) {
 		footstepList.push(step);
 		count++;
-		var step = app.$refs['step' + count];
+		step = app.$refs['step' + count];
 	}
 
 	var flow = {
@@ -223,7 +230,7 @@
 			answers: [
 				{id:1, next: 'songwriter', text: 'Music, I guess'},
 				{id:0, next: 'vendor', text: 'Buy something from the vendor'},
-				{id:2, next: 'jail', text: 'Tell a joke'}
+				{id:2, next: 'jail', text: 'Tell a joke', outloud: 'jail'}
 			]
 		},
 		'bachelorette': {
@@ -259,7 +266,7 @@
 			answers: [
 				{id:0, next: 'songwriter', text: 'Hear some songs'},
 				{id:1, next: 'performer', text: 'Listen to the street performer over there'},
-				{id:2, next: 'tobi', text: 'Have a nice day!'}
+				{id:2, next: 'tobi', text: 'Go to Tobi\'s', outloud: 'tobis'}
 			]
 		},
 		'jail': {
@@ -309,7 +316,7 @@
 
 	var readyCount = 0;
 	var need = 23;
-	for(key in dialog){
+	for(var key in dialog){
 		dialog[key].onloadedmetadata = function(){
 			readyCount++;
 			if(readyCount === need){
@@ -317,7 +324,7 @@
 				app.initialize('cowboy');
 				lib.startAmbient();
 			}
-		}
+		};
 	}
 
 	window.setInterval(function () {
@@ -326,7 +333,7 @@
 		sDown = false;
 		dDown = false;
 		fDown = false;
-	}, 700)
+	}, 700);
 
 
 })(window.AudioLib);
