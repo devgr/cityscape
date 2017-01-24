@@ -230,7 +230,7 @@
 			answers: [
 				{id:1, next: 'songwriter', text: 'Music, I guess'},
 				{id:0, next: 'vendor', text: 'Buy something from the vendor'},
-				{id:2, next: 'jail', text: 'Tell a joke', outloud: 'jail'}
+				{id:2, next: 'jail', text: 'Tell a joke'}
 			]
 		},
 		'bachelorette': {
@@ -266,16 +266,26 @@
 			answers: [
 				{id:0, next: 'songwriter', text: 'Hear some songs'},
 				{id:1, next: 'performer', text: 'Listen to the street performer over there'},
-				{id:2, next: 'tobi', text: 'Go to Tobi\'s', outloud: 'tobis'}
+				{id:2, next: 'tobi', text: 'Go to Tobi\'s'}
 			]
 		},
 		'jail': {
-			question: ':(',
-			lose: true
+			intro: 'jail',
+			question: 'You are in jail',
+			answers: [
+				{id:0, next: 'cowboy', text: 'okay', outloud: 'respond_to_street_performer'},
+				{id:1, next: 'cowboy', text: '', outloud: 'respond_to_street_performer'},
+				{id:2, next: 'cowboy', text: '', outloud: 'respond_to_street_performer'}
+			]
 		},
 		'tobi': {
-			question: '!!!',
-			win: true
+			intro: 'tobis',
+			question: 'You made it!',
+			answers: [
+				{id:0, next: 'cowboy', text: 'okay', outloud: 'respond_to_street_performer'},
+				{id:1, next: 'cowboy', text: '', outloud: 'respond_to_street_performer'},
+				{id:2, next: 'cowboy', text: '', outloud: 'respond_to_street_performer'}
+			]
 		}
 	};
 
