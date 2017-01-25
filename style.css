@@ -5,3 +5,14 @@
 a:hover{
 	cursor: pointer;
 }
+
+@media speech{
+	.screen-only{
+		display: none;
+	}
+}
+@media screen{
+	.speech-only{
+		display: none;
+	}
+}

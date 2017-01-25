@@ -14,7 +14,7 @@
 	var app = new Vue({
 		el: '#app',
 		data: {
-			dialog: 'Question....',
+			dialog: 'Loading...',
 			answers:[],
 			personName: '',
 			gameState: 'game'

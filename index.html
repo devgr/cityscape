@@ -2,16 +2,19 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>Nashville</title>
+        <title>Cityscape - Nashville</title>
         <!-- <link rel="icon" type="image/png" href="favicon.png"> -->
 
         <script src="vue.js"></script>
         <script src="vue-resource.js"></script>
         <link rel="stylesheet" type="text/css" href="style.css" />
         <script src="audiolib.js"></script>
+        <meta name="description" content="Cityscape is an audio game that pokes fun at different stereotypes found in downtown Nashville, TN. Choose your own adventure as you converse with a cowboy, a street performer, some party-goers, and more. Speakers or headphones required." />
+        <meta name="keywords" content="audio,web audio api,html5,javascript,audio game,game,videogame,video game,nashville,tennessee"
     </head>
     <body>
-        <div id="app">
+        <p class='speech-only'>To play this audio game, be sure your browser is up to date and has JavaScript enabled.</p>
+        <div id="app" class='screen-only'>
             <audio ref='intro_cowboy' src='src/dialog/intro_cowboy.mp3'></audio>
             <audio ref='cowboy2_intro' src='src/dialog/cowboy2_intro.mp3'></audio>
             <audio ref='respond_to_cowboy1' src='src/dialog/respond_to_cowboy1.mp3'></audio>
